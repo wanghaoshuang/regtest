@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Define some common functions.
+# Test pull_models.sh
 #
 # Copyright (c) 2016 PaddlePaddle Authors. All Rights Reserved
 #
@@ -16,12 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 set -ex
-
-# error code
-readonly E_ARGS_NUM=1
-readonly E_DIR_NO_EXIST=2
-
-function err() {
-  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" >&2
-}
+bash build_install_paddle.sh "WITH_GPU=OFF WITH_AVX=ON WITH_TESTING=OFF RUN_TEST=OFF PYTHON_ABI=cp27-cp27mu"
+paddle version
