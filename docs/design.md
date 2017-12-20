@@ -79,3 +79,6 @@ There are several records in the report:
 
 If the status is far from the baseline, this report will alert a `FAIL` signal, 
 and developers can rerun the test and check whether there are some bugs in recently merged pull requests.
+
+## To be compatible with different Paddle versions
+There might be much changes to the model configs, so the model test framework should not just use patches or based on the directory structure.
