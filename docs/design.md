@@ -80,5 +80,8 @@ There are several records in the report:
 If the status is far from the baseline, this report will alert a `FAIL` signal, 
 and developers can rerun the test and check whether there are some bugs in recently merged pull requests.
 
-## To be compatible with different Paddle versions
-There might be much changes to the model configs, so the model test framework should not just use patches or based on the directory structure.
+## To be compatible with changes
+The test framework should compatible with any changes to the model config,
+so it should not use patches or based on the directory structure.
+
+It should have a SDK, the model that need test should import it and fill soome information. This SDK will be triggerred if called by the test framework, and will be hidden if test framework not valid.
