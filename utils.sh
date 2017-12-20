@@ -13,58 +13,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# some constants
-models_url='https://github.com/PaddlePaddle/models.git'
-paddle_url='https://github.com/PaddlePaddle/Paddle.git'
 
-
-# pull latest src from remote github repo
-# usage:
-#   pull_repo url path
-# arguments:
-#   url: git repo url
-#   path: local repo path
-pull_repo() {
-  [[ $# -ne 2 ]] && echo "arguments error!" && return 1;
-  path=$2
-  url=$1
-  if [ -d $path ]; then
-    if [ ! -d ${path}/.git ]; then
-        echo "$path exists, but it is not a git repo."
-        exit 1
-    fi
-    cd ${path}
-    remote=`git remote | grep "upstream"`
-    if [[ '' == $remote ]];then
-        git remote add upstream $url
-    fi
-    git fetch upstream
-    git pull upstream develop
-    cd -
-  else
-    git clone $url $path
-  fi
+function err() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" >&2
 }
 
-# Build and install paddle
-# usage:
-#   build_install path
-# arguments:
-#   path: local paddle source path
-build_install() {
-  path=$1
-  [ ! -d ${path}/build ] && \
-    echo """please ensure ${path}/build exists,
-    and being builded success manually before calling build_install""" && \
-    return 1
-  [ -d ${path}/output ] && rm -rf ${path}/output
-  cd ${path}/build
-  cmake ..
-  make -j32 && make install -j32
-  if [ ! -d ${path}/output ];then
-    echo "please ensure building output path is ${path}/output"
+###############################
+# Run a model according to configs
+# Globals:
+#   None
+# Arguments:
+#   model_path:
+#   config_file:
+#   log_path:
+# return:
+#   None
+###############################
+function run_model() {
+  [[ $# < 1 || $# > 3 ]] && echo "args err"; return 1
+  model_path=$1
+  log_path=${model_path}/log/
+  rm -rf ${log_path}
+  mkdir -p ${log_path}
+  if [ -d ${model_path}/baseline ];then
+      cd ${model_path}
+      for config in `${model_path}/baseline/case*`
+      do
+        python ${model_path}/train.py `head -1 ${model_path}/baseline/$config` >> ${log_path}/${config}.log
+      done
+      cd -
   fi
-  cd -
-  pip uninstall -y ${path}/output/opt/paddle/share/wheels/*.whl
-  pip install ${path}/output/opt/paddle/share/wheels/*.whl
+
 }
