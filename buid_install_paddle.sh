@@ -38,7 +38,7 @@ options="${@}"
 git clone ${PADDLE_URL} ${PADDLE_PATH}
 
 cd /
-env ${options}
+env ${options} \
 bash ${PADDLE_PATH}/paddle/scripts/docker/build.sh
 pip uninstall ${PADDLE_PATH}/build/python/dist/*.whl
 pip install ${PADDLE_PATH}/build/python/dist/*.whl
