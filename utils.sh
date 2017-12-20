@@ -44,14 +44,14 @@ function pull_repo() {
   [[ $# -ne 2 ]] && err "Arguments error!" && return ${E_ARGS_NUM};
   local path=$2
   local url=$1
-  if [ -d $path ]; then
-    if [ ! -d ${path}/.git ]; then
+  if [[ -d $path ]]; then
+    if [[ ! -d ${path}/.git ]]; then
         err "$path exists, but it is not a git repo."
         return ${E_DIR_NO_EXIST}
     fi
     cd ${path}
     remote=`git remote | grep "upstream" || true`
-    if [[ 'S' == 'S'$remote ]];then
+    if [[ -z $remote ]]; then
         git remote add upstream $url
     fi
     git fetch upstream
@@ -81,7 +81,7 @@ function build_install() {
   local path=$1
   local thread_num=16
   [[ $# == 2 ]] && thread_num=$2
-  [ ! -d ${path}/build ] && \
+  [[ ! -d ${path}/build ]] && \
     err """please ensure ${path}/build exists,
     and being builded success manually before calling build_install""" && \
     return ${E_DIR_NO_EXIST}
@@ -89,7 +89,7 @@ function build_install() {
   cd ${path}/build
   cmake ..
   make -j${thread_num} && make install -j${thread_num}
-  if [ ! -d ${path}/output ];then
+  if [[ ! -d ${path}/output ]]; then
     echo "please ensure building output path is ${path}/output"
   fi
   cd -
