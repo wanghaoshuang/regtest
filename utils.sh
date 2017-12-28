@@ -15,12 +15,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 set -ex
-
 # error code
-readonly E_ARGS_NUM=1
-readonly E_DIR_NO_EXIST=2
+readonly E_ARG_NUM=1
+readonly E_FILE_NOT_FOUND=2
+readonly E_DIR_NO_EXIST=3
 
 function err() {
   echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" >&2
