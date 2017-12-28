@@ -35,6 +35,10 @@ set -ex
 #   None
 ###############################
 function run_model() {
+  local TIME_BIN='/usr/bin/time'
+  # TODO(wanghaoshuang): Add more metrics
+  local TIME_FORMAT="""metric:elapsed_real_time=%e
+metric:mrss=%M"""
   local num_args=3
   [[ $# -ne ${num_args} ]] && err "Arguments error!" && return ${E_ARG_NUM}
   local model_path=$1
@@ -48,7 +52,7 @@ function run_model() {
   cd ${model_path}
   # TODO(wanghaoshuang): Support for multiline
   cat ${config_file} | while read option; do
-    python train.py ${option} &> ${log_path}/config_${line_num}.log
+    ${TIME_BIN} "${TIME_FORMAT}" python train.py ${option} &> ${log_path}/config_${line_num}.log
     let line_num+=1
     # TODO(wanghaoshuang): Retry after failed
   done
