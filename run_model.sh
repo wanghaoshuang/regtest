@@ -35,7 +35,8 @@ set -ex
 #   None
 ###############################
 function run_model() {
-  [[ $# -ne 3 ]] && err "Arguments error!" && return ${E_ARG_NUM}
+  local num_args=3
+  [[ $# -ne ${num_args} ]] && err "Arguments error!" && return ${E_ARG_NUM}
   local model_path=$1
   local config_file=$2
   local log_path=$3
