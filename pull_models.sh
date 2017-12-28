@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Define some common functions.
+# Pull latest models from git repo.
 #
 # Copyright (c) 2016 PaddlePaddle Authors. All Rights Reserved
 #
@@ -15,12 +15,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-set -ex
-# error code
-readonly E_ARG_NUM=1
-readonly E_FILE_NOT_FOUND=2
-readonly E_DIR_NO_EXIST=3
 
-function err() {
-  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" >&2
-}
+readonly USAGE="---------------------
+  USAGE:
+    ./${0} <models_path>
+  Arguments:
+    <models_path>: Local absolution path of models.
+------------------"
+set -ex
+. ./utils.sh
+readonly MODELS_URL='https://github.com/PaddlePaddle/models.git'
+readonly ARGS_SIZE=1
+models_path=$1
+[[ ${ARGS_SIZE} -ne $# ]] && err "${USAGE}" && exit ${E_ARGS_NUM}
+
+[[ -d ${models_path} ]] && rm -rf ${models_path}
+git clone ${MODELS_URL} ${models_path}

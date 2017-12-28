@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Define some common functions.
+# Test pull_models.sh
 #
 # Copyright (c) 2016 PaddlePaddle Authors. All Rights Reserved
 #
@@ -15,12 +15,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-set -ex
-# error code
-readonly E_ARG_NUM=1
-readonly E_FILE_NOT_FOUND=2
-readonly E_DIR_NO_EXIST=3
 
-function err() {
-  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $@" >&2
-}
+
+set -ex
+bash pull_models.sh ./models
