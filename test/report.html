@@ -1,0 +1,32 @@
+<div>
+    <h3>{{ config }}</h3>
+<table border="1">
+<thead>
+<tr>
+<th>metric</th>
+<th>baseline</th>
+<th>result</th>
+<th>diff</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mrss</td>
+<td>{{ baseline['mrss'] }}</td>
+<td>{{ result['mrss'] }}</td>
+{% set diff =  baseline['mrss'] - result['mrss'] %}
+{% if diff < 0 %}
+<td><font color=red>{{ diff }}</font></td>
+{% else %}
+<td><font>{{ baseline['mrss'] - result['mrss'] }}</font></td>
+{% endif%}
+</tr>
+<tr>
+<td>elapsed_real_time</td>
+<td>{{ baseline['elapsed_real_time'] }}</td>
+<td>{{ result['elapsed_real_time'] }}</td>
+<td><font color=red>{{ baseline['elapsed_real_time'] - result['elapsed_real_time'] }}</font></td>
+</tr>
+</tbody>
+</table>
+</div>

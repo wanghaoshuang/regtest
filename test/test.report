@@ -1,0 +1,31 @@
+<div>
+    <h3></h3>
+<table border="1">
+<thead>
+<tr>
+<th>metric</th>
+<th>baseline</th>
+<th>result</th>
+<th>diff</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mrss</td>
+<td>5788920.0</td>
+<td>5788928.0</td>
+
+
+<td><font color=red>-8.0</font></td>
+
+</tr>
+<tr>
+<td>elapsed_real_time</td>
+<td>88.18</td>
+<td>88.18</td>
+<td><font color=red>0.0</font></td>
+</tr>
+</tbody>
+</table>
+</div>
+
