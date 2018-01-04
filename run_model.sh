@@ -14,7 +14,9 @@
 # limitations under the License.
 
 set -ex
-. ./utils.h
+. ./utils.sh
+export PATH=`pwd`:$PATH
+export PYTHONPATH=`pwd`:$PYTHONPATH
 
 ###############################
 # Run a model according to configs
@@ -36,6 +38,7 @@ set -ex
 ###############################
 function run_model() {
   local TIME_BIN='/usr/bin/time'
+  local REPORT_NAME='report'
   # TODO(wanghaoshuang): Add more metrics
   local TIME_FORMAT="""metric:elapsed_real_time=%e
 metric:mrss=%M"""
@@ -44,15 +47,26 @@ metric:mrss=%M"""
   local model_path=$1
   local config_file=$2
   local log_path=$3
-  [[ -d ${log_path} ]] && rm -rf ${log_path}
-  mkdir -p ${log_path}
+  [[ ! -d ${log_path} ]] && mkdir -p ${log_path}
   [[ ! -f ${config_file} ]] && err "${config_file} doesn't exists!" \
   return ${E_FILE_NOT_FOUND}
   local line_num=0
   cd ${model_path}
+  [[ -f ${log_path}/${REPORT_NAME} ]] && rm ${log_path}/${REPORT_NAME}
   # TODO(wanghaoshuang): Support for multiline
   cat ${config_file} | while read option; do
-    ${TIME_BIN} "${TIME_FORMAT}" python train.py ${option} &> ${log_path}/config_${line_num}.log
+    # train
+    ${TIME_BIN} -f "${TIME_FORMAT}" python train.py ${option} &> ${log_path}/config_${line_num}.log
+
+    cd ${log_path}
+    # analysis log
+    cat ./config_${line_num}.log | analysis.py &> ./config_${line_num}.result
+    # generate report
+    render.py --baseline_file="config_${line_num}.baseline" \
+    --result_file="config_${line_num}.result" \
+    --template_file="report.html" >> ${REPORT_NAME}
+    cd ${log_path}
+
     let line_num+=1
     # TODO(wanghaoshuang): Retry after failed
   done
